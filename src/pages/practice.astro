@@ -1,0 +1,26 @@
+---
+import Site from '../layouts/Site.astro';
+import { Content as Archive, getHeadings } from '../content/practice-archive.md';
+
+const topics = getHeadings().filter(({ depth }) => depth === 2);
+---
+<Site title="修学笔记">
+  <section class="sec">
+    <div class="sec-head">
+      <h1>修学笔记</h1>
+      <p class="sub">净土与唯识专题归档</p>
+    </div>
+    <nav class="tabs" aria-label="切换笔记板块">
+      <a class="tab" href="/cross-border/">跨境笔记</a>
+      <a class="tab" href="/practice/" aria-current="page">修学笔记</a>
+    </nav>
+    <nav aria-label="修学专题索引">
+      <ul class="topic-index">
+        {topics.map(({ slug, text }) => <li><a href={'#' + slug}>{text}</a></li>)}
+      </ul>
+    </nav>
+    <article class="prose note-body practice-archive">
+      <Archive />
+    </article>
+  </section>
+</Site>

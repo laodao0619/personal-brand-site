@@ -1,0 +1,12 @@
+---
+import Site from '../layouts/Site.astro';
+
+---
+<Site title="联系我">
+<section class="sec">
+    <div class="sec-head"><h1>联系我</h1></div>
+    <ul class="contact-list">
+      {['邮箱', '小红书', 'Instagram'].map(channel => <li><span>{channel}</span><span>待填写</span></li>)}
+    </ul>
+  </section>
+</Site>

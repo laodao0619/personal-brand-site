@@ -1,0 +1,42 @@
+---
+import Site from '../layouts/Site.astro';
+import { Content as Shopify } from '../content/01-shopify.md';
+import { Content as Meta } from '../content/02-meta-ads.md';
+import { Content as Google } from '../content/03-google-ads.md';
+import { Content as TikTok } from '../content/04-tiktok-shop.md';
+import { Content as OnePerson } from '../content/05-ai-one-person-company.md';
+import { Content as CRM } from '../content/06-crm-content.md';
+import { Content as Daily } from '../content/2026-11-15.md';
+
+const notes = [
+  { id: 'shopify', title: 'Shopify 独立站运营', Article: Shopify },
+  { id: 'meta', title: 'Meta 广告投放', Article: Meta },
+  { id: 'google', title: 'Google 广告', Article: Google },
+  { id: 'tiktok', title: 'TikTok Shop 美国', Article: TikTok },
+  { id: 'one-person', title: 'AI 一人公司', Article: OnePerson },
+  { id: 'crm', title: '私域复购与内容', Article: CRM },
+  { id: 'daily', title: '每日学习 · 2026-11-15', Article: Daily },
+];
+---
+<Site title="跨境笔记">
+  <section class="sec">
+    <div class="sec-head">
+      <h1>跨境笔记</h1>
+      <p class="sub">跨境运营学习记录。链接来自原笔记，部分链接的可访问性尚未确认。</p>
+    </div>
+    <nav class="tabs" aria-label="切换笔记板块">
+      <a class="tab" href="/cross-border/" aria-current="page">跨境笔记</a>
+      <a class="tab" href="/practice/">修学笔记</a>
+    </nav>
+    <div class="note-stack">
+      {notes.map(({ id, title, Article }) => (
+        <details id={id}>
+          <summary><h2>{title}</h2></summary>
+          <article class="prose note-body">
+            <Article />
+          </article>
+        </details>
+      ))}
+    </div>
+  </section>
+</Site>

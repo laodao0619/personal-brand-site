@@ -1,0 +1,100 @@
+---
+import Site from '../layouts/Site.astro';
+import { Content as Shopify } from '../content/01-shopify.md';
+import { Content as Meta } from '../content/02-meta-ads.md';
+import { Content as Google } from '../content/03-google-ads.md';
+import { Content as TikTok } from '../content/04-tiktok-shop.md';
+import { Content as OnePerson } from '../content/05-ai-one-person-company.md';
+import { Content as CRM } from '../content/06-crm-content.md';
+import { Content as Daily } from '../content/2026-11-15.md';
+
+const notes = [
+  { id: 'shopify', title: 'Shopify 独立站运营', Article: Shopify },
+  { id: 'meta', title: 'Meta 广告投放', Article: Meta },
+  { id: 'google', title: 'Google 广告', Article: Google },
+  { id: 'tiktok', title: 'TikTok Shop 美国', Article: TikTok },
+  { id: 'one-person', title: 'AI 一人公司', Article: OnePerson },
+  { id: 'crm', title: '私域复购与内容', Article: CRM },
+  { id: 'daily', title: '每日学习 · 2026-11-15', Article: Daily },
+];
+---
+<Site title="跨境笔记">
+  <section class="sec">
+    <div class="sec-head">
+      <h1>跨境笔记</h1>
+      <p class="sub">跨境运营学习记录。链接来自原笔记，部分链接的可访问性尚未确认。</p>
+    </div>
+    <nav class="tabs" aria-label="切换笔记板块">
+      <a class="tab" href="/cross-border/" aria-current="page">跨境笔记</a>
+      <a class="tab" href="/practice/">修学笔记</a>
+    </nav>
+    <div class="note-filter" data-filter hidden>
+      <label for="note-search">查找笔记</label>
+      <input id="note-search" type="search" placeholder="输入主题或关键词" />
+      <p role="status" data-results></p>
+    </div>
+    <div class="note-stack">
+      {notes.map(({ id, title, Article }) => (
+        <details id={id}>
+          <summary><h2>{title}</h2></summary>
+          <article class="prose note-body">
+            <Article />
+          </article>
+        </details>
+      ))}
+    </div>
+  </section>
+</Site>
+
+<script>
+  const filter = document.querySelector<HTMLElement>('[data-filter]')!;
+  const field = document.querySelector<HTMLInputElement>('#note-search')!;
+  const results = document.querySelector<HTMLElement>('[data-results]')!;
+  const notes = Array.from(document.querySelectorAll<HTMLDetailsElement>('.note-stack details'));
+
+  filter.hidden = false;
+  field.addEventListener('input', () => {
+    const query = field.value.trim().toLocaleLowerCase();
+    let count = 0;
+    for (const note of notes) {
+      const matches = (note.textContent ?? '').toLocaleLowerCase().includes(query);
+      note.hidden = !matches;
+      if (matches) count++;
+    }
+    results.textContent = query ? (count ? `找到 ${count} 则笔记` : '没有找到匹配的笔记。') : '';
+  });
+
+  function openLinkedNote() {
+    const id = window.location.hash.slice(1);
+    const note = document.getElementById(id);
+    if (note instanceof HTMLDetailsElement) note.open = true;
+  }
+
+  openLinkedNote();
+  window.addEventListener('hashchange', openLinkedNote);
+</script>
+
+<style>
+  .note-filter {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    max-width: 380px;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+  .note-filter[hidden], .note-stack details[hidden] { display: none; }
+  .note-filter label { font-weight: 750; }
+  .note-filter input {
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    font: inherit;
+  }
+  .note-filter input:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  .note-filter p { color: var(--muted); }
+  .note-filter p:empty { display: none; }
+</style>

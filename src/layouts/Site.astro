@@ -1,0 +1,40 @@
+---
+import '../styles/site.css';
+const { title = '首页', frontmatter } = Astro.props;
+const pageTitle = frontmatter?.title ?? title;
+const nav = [
+  ['/', '首页'], ['/about/', '关于我'], ['/services/', '服务'],
+  ['/cross-border/', '跨境笔记'], ['/practice/', '修学笔记'], ['/rain/', '雨声'], ['/contact/', '联系我'],
+];
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/seal.svg" type="image/svg+xml" />
+    <title>{pageTitle} · 高嘉隆</title>
+  </head>
+  <body data-page={Astro.url.pathname}>
+    <a class="skip-link" href="#content">跳到正文</a>
+    <header class="topnav">
+      <div class="wrap">
+        <a class="brand" href="/"><span class="seal" aria-hidden="true">隆</span>高嘉隆</a>
+        <nav aria-label="主导航">
+          {nav.map(([href, label]) => (
+            <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main class="wrap" id="content"><slot /></main>
+    <footer>
+      <div class="wrap footer-inner">
+        <span>高嘉隆 · 窗边信号站</span>
+        <a href="/#stations">探索印记 <span data-stamp-count>0</span> / 4</a>
+      </div>
+    </footer>
+    <script src="../scripts/stamp-trail.ts"></script>
+  </body>
+</html>

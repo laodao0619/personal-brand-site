@@ -1,0 +1,262 @@
+---
+import Site from '../layouts/Site.astro';
+import { stations } from '../data/stations';
+
+const tips = [
+  '想看看这张书桌从哪儿来？可以回到窗边手记。',
+  '跨境笔记里有一个练习：测试广告时，一次只变一个因素。',
+  '如果想安静一会儿，雨声室有纯雨声，也能叠加环境音乐。',
+  '净土与唯识的阅读线索和待研讨问题，都在修学笔记里。',
+];
+---
+<Site title="首页">
+  <section class="signal-hero" aria-labelledby="signal-title">
+    <div class="signal-copy">
+      <p class="signal-author">高嘉隆 / 独立站运营</p>
+      <h1 id="signal-title">窗边<span>信号站<span class="signal-period">。</span></span></h1>
+      <p class="signal-intro">三年独立站运营经验。我帮卖家诊断广告浪费，也陪小团队搭建运营流程。这里收录跨境、修学和一间可以听雨的房间。</p>
+      <div class="signal-actions">
+        <a href="#stations">开始探索 <span aria-hidden="true">↓</span></a>
+        <a href="/services/">查看服务 <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <div class="host-panel">
+      <figure class="host-portrait">
+        <img src="/pixel-host.webp" alt="戴帽子和眼镜、盘腿坐着的像素人物" width="498" height="498" fetchpriority="high" />
+      </figure>
+      <div class="host-note">
+        <div>
+          <p class="host-title">像素向导</p>
+          <p id="host-message" role="status">{tips[0]}</p>
+        </div>
+        <button type="button" data-host data-tips={JSON.stringify(tips)} aria-controls="host-message" hidden>下一条 <span aria-hidden="true">↻</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="station-section" id="stations" aria-labelledby="station-title">
+    <div class="station-heading">
+      <div>
+        <h2 id="station-title">探索印记</h2>
+        <p>打开一个站点，点亮一枚印记。进度保存在当前浏览器。</p>
+      </div>
+      <div class="station-progress">
+        <label for="stamp-progress"><span data-stamp-count>0</span> / {stations.length} 已点亮</label>
+        <progress id="stamp-progress" value="0" max={stations.length} data-stamp-progress></progress>
+      </div>
+    </div>
+
+    <div class="station-grid">
+      {stations.map(station => (
+        <a class="station-card" data-tone={station.tone} href={station.href}>
+          <div class="station-card-top">
+            <span class="station-symbol" aria-hidden="true">{station.symbol}</span>
+            <span class="station-stamp" data-stamp={station.href}>未点亮</span>
+          </div>
+          <h3>{station.label}</h3>
+          <p>{station.description}</p>
+        </a>
+      ))}
+    </div>
+    <p class="station-completion" data-stamp-completion hidden>四枚印记已点亮。你逛完了窗边信号站。</p>
+  </section>
+
+  <a class="desk-link" href="/desk/">
+    <div>
+      <h2>回到窗边手记</h2>
+      <p>点一点桌上的窗、笔记本、念珠和电脑。</p>
+    </div>
+    <span aria-hidden="true">↗</span>
+  </a>
+</Site>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-host]');
+  const message = document.querySelector<HTMLElement>('#host-message');
+
+  if (button && message) {
+    const tips: string[] = JSON.parse(button.dataset.tips ?? '[]');
+    const portrait = document.querySelector<HTMLElement>('.host-portrait');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let current = 0;
+    button.hidden = false;
+
+    button.addEventListener('click', () => {
+      current = (current + 1) % tips.length;
+      message.textContent = tips[current];
+      if (reducedMotion.matches || !portrait) return;
+      portrait.getAnimations().forEach(animation => animation.cancel());
+      portrait.animate([
+        { transform: 'translateY(0) rotate(0)' },
+        { transform: 'translateY(-6px) rotate(-1.5deg)' },
+        { transform: 'translateY(0) rotate(0)' },
+      ], { duration: 280, easing: 'cubic-bezier(.2,.75,.25,1)' });
+    });
+  }
+</script>
+
+<style>
+  .signal-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .84fr);
+    align-items: stretch;
+    gap: clamp(28px, 7vw, 108px);
+    margin-block: clamp(24px, 5vw, 68px) clamp(38px, 6vw, 84px);
+  }
+
+  .signal-copy {
+    align-self: center;
+    color: var(--ink);
+  }
+
+  .signal-author { font-size: 13px; font-weight: 750; color: var(--muted); }
+  h1 {
+    margin-block: 14px 23px;
+    font-size: clamp(58px, 9.4vw, 136px);
+    line-height: .99;
+    letter-spacing: -.055em;
+    font-weight: 900;
+  }
+  h1 > span { display: block; }
+  .signal-period { color: var(--focus); }
+  .signal-intro { max-width: 32em; color: var(--secondary); }
+  .signal-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 23px; }
+  .signal-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 45px;
+    padding: 8px 13px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    font-size: 14px;
+    font-weight: 750;
+  }
+  .signal-actions a:first-child { background: var(--accent); border-color: var(--accent-ink); color: var(--accent-ink); }
+  .signal-actions a:hover { box-shadow: 3px 3px 0 var(--ink); }
+
+  .host-panel {
+    display: grid;
+    align-content: space-between;
+    gap: 12px;
+    position: relative;
+    padding: clamp(14px, 3vw, 32px);
+    border: 1px solid #34473e;
+    background:
+      radial-gradient(#405b5033 1px, transparent 1px) 0 0 / 12px 12px,
+      #badecd;
+    color: #22302c;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .host-portrait {
+    align-self: center;
+    justify-self: center;
+    width: min(100%, 324px);
+    overflow: hidden;
+    border: 1px solid #53645d;
+    background: #fff;
+  }
+  .host-portrait img { display: block; width: 100%; height: auto; }
+
+  .host-note {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 6px 14px;
+    min-height: 108px;
+    padding: 12px;
+    border: 1px solid #53645d;
+    background: #f8fdf8;
+  }
+  .host-title { font-size: 12px; font-weight: 750; color: #415b50; margin-bottom: 4px; }
+  #host-message { font-size: 14px; line-height: 1.55; }
+  .host-note button {
+    flex: none;
+    align-self: end;
+    min-height: 40px;
+    padding: 4px 9px;
+    font: 650 12px var(--sans);
+    background: #d5edc1;
+    color: #25362d;
+    border: 1px solid #53645d;
+    cursor: pointer;
+  }
+  .host-note button:focus-visible { outline: 2px solid #473fa2; outline-offset: 3px; }
+  .host-note button:hover { background: #e4f4d7; }
+
+  .station-section { scroll-margin-top: 148px; }
+  .station-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px 40px;
+    flex-wrap: wrap;
+    margin-bottom: 17px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--line);
+  }
+  .station-heading h2 { font-size: clamp(27px, 4vw, 44px); }
+  .station-heading p { color: var(--muted); margin-top: 6px; font-size: 14px; }
+  .station-progress { display: grid; gap: 4px; min-width: min(100%, 144px); }
+  .station-progress label { font: 700 13px/1.4 var(--sans); }
+  progress { width: 100%; height: 8px; accent-color: var(--focus); }
+
+  .station-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .station-card {
+    min-width: 0;
+    padding: clamp(14px, 2.3vw, 27px);
+    background: var(--card-color);
+    color: #292640;
+    border: 1px solid #554d73;
+    display: grid;
+    align-content: start;
+    gap: 6px;
+  }
+  .station-card:hover { box-shadow: 4px 4px 0 var(--ink); }
+  .station-card[data-tone="violet"] { --card-color: #e4dbfc; }
+  .station-card[data-tone="peach"] { --card-color: #f7dfd9; }
+  .station-card[data-tone="mint"] { --card-color: #cceadd; }
+  .station-card[data-tone="lime"] { --card-color: #e4edbc; }
+
+  .station-card-top { display: flex; justify-content: space-between; align-items: start; gap: 3px; }
+  .station-symbol { font: 700 clamp(28px, 4vw, 50px)/1 monospace; }
+  .station-stamp { padding: 2px 5px; border: 1px dashed #716883; font: 600 11px/1.4 var(--sans); }
+  .station-stamp.is-stamped { background: #292640; color: #fff; border-color: #292640; border-style: solid; }
+  .station-card h3 { margin-top: 6px; font-size: clamp(17px, 2vw, 27px); }
+  .station-card p { font-size: 13px; line-height: 1.5; }
+  .station-completion { margin-top: 12px; color: var(--focus); font-weight: 750; }
+
+  .desk-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin-top: 26px;
+    padding: 16px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+  }
+  .desk-link:hover { border-color: var(--focus); }
+  .desk-link h2 { font-size: 18px; }
+  .desk-link p { margin-top: 5px; color: var(--muted); font-size: 13px; }
+  .desk-link > span { font-size: 24px; }
+
+  @media (max-width: 780px) {
+    .signal-hero { grid-template-columns: minmax(0, 1fr); }
+    h1 { font-size: clamp(62px, 14vw, 104px); }
+    .host-panel { max-width: 525px; }
+    .host-portrait { width: min(100%, 248px); }
+    .station-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .station-card, .signal-actions a { transition: box-shadow .16s ease; }
+    .host-panel { animation: signal-in .43s var(--ease) both; }
+    @keyframes signal-in {
+      from { opacity: 0; transform: translateY(9px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>

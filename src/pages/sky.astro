@@ -1,0 +1,216 @@
+---
+import Site from '../layouts/Site.astro';
+
+const meteorUrl = 'https://www.meteorshowers.org/view/Southern-Delta-Aquariids';
+const points = [[16, 62], [28, 29], [49, 47], [66, 22], [83, 58]];
+const glitter = Array.from({ length: 85 }, (_, index) => ({
+  x: (index * 67 + 11) % 997 / 10,
+  y: (index * 167 + 53) % 991 / 10,
+  size: 1 + index % 4 / 2,
+  opacity: (2 + index % 8) / 10,
+}));
+---
+<Site title="夜空">
+  <section class="sky-intro" aria-labelledby="sky-title">
+    <div>
+      <h1 id="sky-title">夜空观测站<span>。</span></h1>
+      <p>先拾起五枚星点，连出自己的星轨。再跟随地球，看看真实的流星体怎样绕太阳运行。</p>
+    </div>
+    <nav aria-label="夜空体验">
+      <a href="#star-game">拾星游戏 ↓</a>
+      <a href="#meteor-observatory">真实观测器 ↓</a>
+    </nav>
+  </section>
+
+  <section id="star-game" class="sky-section" aria-labelledby="star-title" data-star-game>
+    <div class="sky-section-head">
+      <div>
+        <h2 id="star-title">拾星</h2>
+        <p>按任意顺序点亮五枚星点。也可以用 Tab 选择、用 Enter 拾取。</p>
+      </div>
+      <div class="game-controls" data-game-controls hidden>
+        <div role="group" aria-label="星空视角">
+          <button type="button" data-view="orbit" aria-pressed="true">星图</button>
+          <button type="button" data-view="horizon" aria-pressed="false">地平线</button>
+        </div>
+        <button type="button" data-reset>再玩一局</button>
+      </div>
+    </div>
+
+    <div class="star-stage" data-stage data-view="orbit">
+      <div class="star-field" aria-hidden="true">
+        {glitter.map(star => <i style={`--x:${star.x}%;--y:${star.y}%;--size:${star.size}px;--alpha:${star.opacity}`}></i>)}
+      </div>
+      <div class="sky-disk" aria-hidden="true"></div>
+      <div class="sky-horizon" aria-hidden="true"></div>
+      <canvas data-lines aria-hidden="true"></canvas>
+      {points.map(([x, y], index) => (
+        <button
+          type="button"
+          class="star-point"
+          data-star={index}
+          aria-label={`拾取星点 ${index + 1}`}
+          aria-pressed="false"
+          hidden
+          style={`--x:${x}%;--y:${y}%`}
+        ><span aria-hidden="true">✦</span></button>
+      ))}
+    </div>
+    <div class="game-status">
+      <p role="status" data-star-status>已拾取 0 / 5</p>
+      <progress aria-label="拾星进度" data-star-progress value="0" max={points.length}></progress>
+    </div>
+    <noscript><p>启用 JavaScript 后即可拾取星点。</p></noscript>
+  </section>
+
+  <section id="meteor-observatory" class="sky-section observatory" aria-labelledby="meteor-title">
+    <div class="sky-section-head">
+      <div>
+        <h2 id="meteor-title">宝瓶座 δ 南流星雨</h2>
+        <p>真实轨道观测器。拖动旋转，滚动或使用画面上的 ± 缩放；还可以切换太阳系、跟随地球与地面视角。</p>
+      </div>
+    </div>
+    <div class="observer-controls">
+      <button type="button" data-observatory-toggle aria-controls="meteor-frame" aria-expanded="false" hidden>加载 3D 观测器</button>
+      <a href={meteorUrl} target="_blank" rel="noopener noreferrer" data-meteor-source>在原站打开 ↗</a>
+    </div>
+    <div id="meteor-frame" class="meteor-frame" hidden></div>
+    <p class="meteor-credit">轨道可视化由 <a href="https://www.meteorshowers.org/" target="_blank" rel="noopener noreferrer">MeteorShowers.org</a> 的 Ian Webster 制作，数据来自 Peter Jenniskens。<a href="https://science.nasa.gov/solar-system/meteors-meteorites/delta-aquariids/" target="_blank" rel="noopener noreferrer">NASA 流星雨介绍 ↗</a></p>
+  </section>
+</Site>
+
+<script src="../scripts/sky-game.ts"></script>
+
+<style>
+  .sky-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 18px 32px;
+    margin-block: clamp(30px, 6vw, 80px) clamp(22px, 4vw, 52px);
+  }
+  h1 { font-size: clamp(43px, 8vw, 105px); line-height: 1.08; letter-spacing: -.057em; font-weight: 900; }
+  h1 span { color: var(--focus); }
+  .sky-intro p, .sky-section-head p { color: var(--secondary); margin-top: 8px; max-width: 52ch; }
+  .sky-intro nav, .game-controls, .game-controls > div, .observer-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .sky-intro a, .sky-section button:not(.star-point), .observer-controls a {
+    padding: 7px 12px;
+    min-height: 43px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    font: 700 14px/1.6 var(--sans);
+    cursor: pointer;
+  }
+  .sky-section button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  .sky-intro a:hover, .sky-section button:not(.star-point):hover, .observer-controls a:hover,
+  .sky-section button[aria-pressed="true"]:not(.star-point) {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .sky-section { scroll-margin-top: 155px; }
+  .sky-section-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    margin-bottom: 12px;
+  }
+  h2 { font-size: clamp(24px, 4vw, 48px); }
+  .sky-section-head p, .game-status, .meteor-credit { font-size: 14px; }
+  .game-controls[hidden], button[hidden], .meteor-frame[hidden] { display: none; }
+  .game-controls { gap: 6px 12px; }
+
+  .star-stage {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    height: clamp(315px, 47vw, 620px);
+    border: 1px solid #554d73;
+    background:
+      radial-gradient(ellipse at 62% 76%, #574873 0, #292d55 29%, transparent 69%),
+      radial-gradient(ellipse at 23% 9%, #302653 0, transparent 59%),
+      #15152c;
+  }
+  .star-stage[data-view="horizon"] {
+    background: radial-gradient(ellipse at 63% 85%, #945e81 0, #3c3a6b 42%, #18172d 81%);
+  }
+  .star-field, .star-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .star-field i {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    background: #e8e2ff;
+    opacity: var(--alpha);
+    border-radius: 50%;
+  }
+  .sky-disk {
+    position: absolute;
+    inset: 18% 10%;
+    transform: rotate(-12deg);
+    border: 1px solid #b4b6e34d;
+    border-radius: 50%;
+    box-shadow: 0 0 0 15px #b4b6e314, 0 0 0 36px #b4b6e311;
+    pointer-events: none;
+  }
+  [data-view="horizon"] .sky-disk { opacity: 0; }
+  .sky-horizon {
+    position: absolute;
+    inset: auto -9% -40%;
+    height: 70%;
+    border: 1px solid #d6bce680;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at 50% 0, #5f5476, #222039 56%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  [data-view="horizon"] .sky-horizon { opacity: 1; }
+
+  .star-point {
+    position: absolute;
+    z-index: 1;
+    left: var(--x);
+    top: var(--y);
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #a6a0cc99;
+    border-radius: 50%;
+    background: #191933e0;
+    color: #ecdfff;
+    font: 22px/1 var(--sans);
+    cursor: pointer;
+  }
+  .star-point:hover { background: #514765; }
+  .star-point[aria-pressed="true"] {
+    color: #3d284c;
+    background: #f5d5ff;
+    border-color: #fae3ff;
+    box-shadow: 0 0 14px #e6b3fc90;
+  }
+  .sky-section .star-point:focus-visible { outline-color: #f5d5ff; }
+  .game-status { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 7px 16px; padding-block: 10px; }
+  .game-status progress { width: min(100%, 150px); height: 8px; accent-color: var(--focus); }
+
+  .observatory { margin-top: clamp(42px, 7vw, 90px); border-top: 1px solid var(--line); padding-top: 21px; }
+  .observer-controls { margin-block: 15px; }
+  .meteor-frame iframe { display: block; width: 100%; height: clamp(470px, 62vw, 720px); border: 1px solid var(--line); background: #15152c; }
+  .meteor-credit { color: var(--muted); }
+  .meteor-credit a { text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sky-disk, .sky-horizon { transition: opacity .35s var(--ease); }
+    .star-point { transition: background-color .2s var(--ease), box-shadow .2s var(--ease); }
+  }
+</style>

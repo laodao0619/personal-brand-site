@@ -1,12 +1,18 @@
 ---
 import Site from '../layouts/Site.astro';
 
+const channels = ['邮箱', '小红书', 'Instagram'];
 ---
 <Site title="联系我">
-<section class="sec">
+  <section class="sec">
     <div class="sec-head"><h1>联系我</h1></div>
     <ul class="contact-list">
-      {['邮箱', '小红书', 'Instagram'].map(channel => <li><span>{channel}</span><span>待填写</span></li>)}
+      {channels.map(channel => (
+        <li>
+          <span>{channel}</span>
+          <span>&#x5F85;&#x586B;&#x5199;</span>
+        </li>
+      ))}
     </ul>
   </section>
 </Site>

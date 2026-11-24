@@ -205,7 +205,7 @@ const glitter = Array.from({ length: 85 }, (_, index) => ({
 
   .observatory { margin-top: clamp(42px, 7vw, 90px); border-top: 1px solid var(--line); padding-top: 21px; }
   .observer-controls { margin-block: 15px; }
-  .meteor-frame iframe { display: block; width: 100%; height: clamp(470px, 62vw, 720px); border: 1px solid var(--line); background: #15152c; }
+  .meteor-frame :global(iframe) { display: block; width: 100%; height: clamp(470px, 62vw, 720px); border: 1px solid var(--line); background: #15152c; }
   .meteor-credit { color: var(--muted); }
   .meteor-credit a { text-decoration: underline; text-underline-offset: 3px; }
 

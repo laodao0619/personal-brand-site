@@ -1,30 +1,39 @@
 ---
 import Site from '../layouts/Site.astro';
-
 ---
 <Site title="首页">
-<section class="hero">
-<div class="hero-grid">
-<div>
-<p class="who">个人品牌站</p>
-<h1>独立站运营者，<br />写跨境，也写修学。</h1>
-<p class="lede">我是高嘉隆，有三年独立站运营经验，负责过全店 GMV。我帮独立站卖家梳理广告浪费，也为一人公司和小团队提供运营陪跑。这里还收录我的跨境与修学笔记。</p>
-<div class="cta">
-<a class="btn btn-solid" href="/services/">看服务</a>
-<a class="btn btn-ghost" href="/cross-border/">看笔记</a>
-</div>
-</div>
-<figure>
-<img src="/study-desk.webp" alt="一张放着工作和修学用品的书桌插画" width="1100" height="733" fetchpriority="high" />
-<figcaption>工作与修学，同一张书桌。插画为本站示意，非实拍。</figcaption>
-</figure>
-</div>
-
-<div class="facts" role="list">
-<div class="fact" role="listitem"><b>3 年</b><span>独立站一线运营，大学起参与项目至今</span></div>
-<div class="fact" role="listitem"><b>全店 GMV</b><span>岗位职责口径：呈现、投放、上下线一手负责</span></div>
-<div class="fact" role="listitem"><b>2 条内容线</b><span>跨境实操六专题 · 净土唯识修学专题</span></div>
-<div class="fact" role="listitem"><b>2 项服务</b><span>广告浪费诊断 · 一人公司陪跑</span></div>
-</div>
-</section>
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="who">高嘉隆 · 独立站运营</p>
+        <h1><span>写跨境，</span><span>也写修学。</span></h1>
+        <p class="lede">三年独立站运营经验，负责过全店 GMV。我帮独立站卖家梳理广告浪费，也为一人公司和小团队提供运营陪跑。</p>
+        <div class="cta">
+          <a class="btn btn-solid" href="/services/">看服务 <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-ghost" href="/cross-border/">看笔记 <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <figure>
+        <div class="art-frame">
+          <img src="/study-desk.webp" alt="窗边的书桌上有一本打开的笔记、念珠和一台电脑，远处是群山" width="1100" height="733" fetchpriority="high" />
+        </div>
+        <figcaption>工作与修学，同一张书桌。本站插画。</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section class="home-notes" aria-labelledby="home-notes-title">
+    <h2 id="home-notes-title">笔记</h2>
+    <div class="home-note-grid">
+      <a href="/cross-border/">
+        <h3>跨境笔记</h3>
+        <p>从独立站运营、广告投放到 AI 一人公司。</p>
+        <span aria-hidden="true">↗</span>
+      </a>
+      <a href="/practice/">
+        <h3>修学笔记</h3>
+        <p>净土与唯识的专题摘录和待研讨问题。</p>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
 </Site>

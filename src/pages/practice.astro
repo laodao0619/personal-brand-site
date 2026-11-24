@@ -14,13 +14,15 @@ const topics = getHeadings().filter(({ depth }) => depth === 2);
       <a class="tab" href="/cross-border/">跨境笔记</a>
       <a class="tab" href="/practice/" aria-current="page">修学笔记</a>
     </nav>
-    <nav aria-label="修学专题索引">
-      <ul class="topic-index">
-        {topics.map(({ slug, text }) => <li><a href={'#' + slug}>{text}</a></li>)}
-      </ul>
-    </nav>
-    <article class="prose note-body practice-archive">
-      <Archive />
-    </article>
+    <div class="reading-layout">
+      <nav aria-label="修学专题索引">
+        <ul class="topic-index">
+          {topics.map(({ slug, text }) => <li><a href={'#' + slug}>{text}</a></li>)}
+        </ul>
+      </nav>
+      <article class="prose note-body">
+        <Archive />
+      </article>
+    </div>
   </section>
 </Site>

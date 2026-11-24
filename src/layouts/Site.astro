@@ -17,6 +17,7 @@ const nav = [
     <title>{pageTitle} · 高嘉隆</title>
   </head>
   <body>
+    <a class="skip-link" href="#content">跳到正文</a>
     <header class="topnav">
       <div class="wrap">
         <a class="brand" href="/"><span class="seal" aria-hidden="true">隆</span>高嘉隆</a>
@@ -27,7 +28,7 @@ const nav = [
         </nav>
       </div>
     </header>
-    <main class="wrap"><slot /></main>
+    <main class="wrap" id="content"><slot /></main>
     <footer><div class="wrap">高嘉隆 · 个人品牌站</div></footer>
   </body>
 </html>

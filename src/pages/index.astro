@@ -1,39 +1,337 @@
 ---
 import Site from '../layouts/Site.astro';
+
+const objects = [
+  {
+    id: 'workbook', name: '笔记本', section: '跨境笔记', x: 34, y: 75,
+    title: '一次测试，只变一个因素',
+    description: '先写清假设、变量和判赢线，再判断一个广告创意值不值得继续投。',
+    href: '/cross-border/#meta', action: '读 Meta 广告笔记',
+  },
+  {
+    id: 'beads', name: '念珠', section: '修学笔记', x: 53, y: 72,
+    title: '三摩地何以称为「等持」？',
+    description: '从词源、唯识五别境心所与念佛三昧，看看同一个名相在不同语境中的用法。',
+    href: '/practice/#名相三摩地', action: '读三摩地摘录',
+  },
+  {
+    id: 'window', name: '窗', section: '雨声室', x: 48, y: 34,
+    title: '把雨声留在背景里',
+    description: '打开窗，听一会儿纯雨声，或加一点原创环境音乐。',
+    href: '/rain/', action: '打开雨声室',
+  },
+  {
+    id: 'computer', name: '电脑', section: '服务', x: 76, y: 67,
+    title: '找出没带来购买的广告花费',
+    description: '按广告、落地页和市场拆开看，明确哪些该停，哪些值得复测。',
+    href: '/services/', action: '了解诊断与陪跑',
+  },
+];
+
+const particles = Array.from({ length: 10 });
 ---
 <Site title="首页">
-  <section class="hero">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <p class="who">高嘉隆 · 独立站运营</p>
-        <h1><span>写跨境，</span><span>也写修学。</span></h1>
-        <p class="lede">三年独立站运营经验，负责过全店 GMV。我帮独立站卖家梳理广告浪费，也为一人公司和小团队提供运营陪跑。</p>
-        <div class="cta">
-          <a class="btn btn-solid" href="/services/">看服务 <span aria-hidden="true">↗</span></a>
-          <a class="btn btn-ghost" href="/cross-border/">看笔记 <span aria-hidden="true">↗</span></a>
-        </div>
+  <div class="desk-page">
+    <header class="desk-intro">
+      <h1>窗边手记<span>。</span></h1>
+      <div class="desk-bio">
+        <p class="desk-name">高嘉隆 <span>独立站运营</span></p>
+        <p>三年独立站运营经验。我为卖家做广告诊断，也为小团队提供运营陪跑，平时记录跨境和修学。</p>
+        <a href="/services/">看服务 <span aria-hidden="true">↗</span></a>
       </div>
-      <figure>
-        <div class="art-frame">
-          <img src="/study-desk.webp" alt="窗边的书桌上有一本打开的笔记、念珠和一台电脑，远处是群山" width="1100" height="733" fetchpriority="high" />
+    </header>
+
+    <section class="desk" aria-label="探索窗边书桌" data-desk>
+      <figure class="desk-art" data-art>
+        <img src="/study-desk.webp" alt="窗边的工作台，桌上摆着打开的笔记本、念珠和电脑，窗外是群山" width="1100" height="733" fetchpriority="high" />
+        <div class="desk-light" aria-hidden="true"></div>
+        <div class="desk-sparks" aria-hidden="true">
+          {particles.map(() => <i></i>)}
         </div>
-        <figcaption>工作与修学，同一张书桌。本站插画。</figcaption>
+        {objects.map((object, index) => (
+          <button
+            class="desk-hotspot"
+            type="button"
+            hidden
+            data-select={object.id}
+            data-x={object.x}
+            data-y={object.y}
+            aria-label={`浏览${object.name}：${object.section}`}
+            aria-controls={`desk-${object.id}`}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            style={`--x:${object.x}%;--y:${object.y}%`}
+          >
+            <span aria-hidden="true">+</span>
+            <span class="hotspot-name" aria-hidden="true">{object.name}</span>
+          </button>
+        ))}
       </figure>
-    </div>
-  </section>
-  <section class="home-notes" aria-labelledby="home-notes-title">
-    <h2 id="home-notes-title">笔记</h2>
-    <div class="home-note-grid">
-      <a href="/cross-border/">
-        <h3>跨境笔记</h3>
-        <p>从独立站运营、广告投放到 AI 一人公司。</p>
-        <span aria-hidden="true">↗</span>
-      </a>
-      <a href="/practice/">
-        <h3>修学笔记</h3>
-        <p>净土与唯识的专题摘录和待研讨问题。</p>
-        <span aria-hidden="true">↗</span>
-      </a>
-    </div>
-  </section>
+
+      <aside class="desk-index" aria-label="桌上索引">
+        <p class="desk-index-label">桌上索引</p>
+        {objects.map((object, index) => (
+          <details id={`desk-${object.id}`} name="desk-index" data-item={object.id} open={index === 0}>
+            <summary>
+              <span>{object.section}</span>
+              <span class="desk-object">{object.name}</span>
+            </summary>
+            <div class="desk-entry">
+              <h2>{object.title}</h2>
+              <p>{object.description}</p>
+              <a href={object.href}>{object.action} <span aria-hidden="true">↗</span></a>
+            </div>
+          </details>
+        ))}
+      </aside>
+    </section>
+  </div>
 </Site>
+
+<script>
+  const desk = document.querySelector<HTMLElement>('[data-desk]')!;
+  const art = desk.querySelector<HTMLElement>('[data-art]')!;
+  const hotspots = Array.from(art.querySelectorAll<HTMLButtonElement>('[data-select]'));
+  const entries = Array.from(desk.querySelectorAll<HTMLDetailsElement>('[data-item]'));
+  const sparks = Array.from(art.querySelectorAll<HTMLElement>('.desk-sparks i'));
+  const motion = matchMedia('(prefers-reduced-motion: no-preference)');
+
+  function burst(hotspot: HTMLButtonElement) {
+    if (!motion.matches) return;
+    art.style.setProperty('--spark-x', hotspot.dataset.x + '%');
+    art.style.setProperty('--spark-y', hotspot.dataset.y + '%');
+
+    sparks.forEach((spark, index) => {
+      spark.getAnimations().forEach(animation => animation.cancel());
+      const angle = index * 2 * Math.PI / sparks.length;
+      const distance = 28 + ((index * 17) % 34);
+      const travel = `${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px`;
+      spark.animate([
+        { opacity: 1, transform: 'translate(0, 0) scale(1)' },
+        { opacity: 0, transform: `translate(${travel}) scale(.35)` },
+      ], { duration: 540 + index * 19, easing: 'cubic-bezier(.14,.7,.35,1)' });
+    });
+  }
+
+  function syncHotspots() {
+    const active = entries.find(entry => entry.open);
+    for (const hotspot of hotspots) {
+      hotspot.setAttribute('aria-pressed', String(hotspot.dataset.select === active?.dataset.item));
+    }
+  }
+
+  hotspots.forEach((hotspot, index) => {
+    hotspot.hidden = false;
+    hotspot.addEventListener('click', () => {
+      const entry = entries[index];
+      if (entry.open) burst(hotspot);
+      entry.open = true;
+      syncHotspots();
+      const summary = entry.querySelector<HTMLElement>('summary')!;
+      summary.focus({ preventScroll: true });
+      if (matchMedia('(max-width: 920px)').matches) {
+        summary.scrollIntoView({ block: 'nearest', behavior: motion.matches ? 'smooth' : 'auto' });
+      }
+    });
+  });
+
+  entries.forEach((entry, index) => {
+    entry.addEventListener('toggle', () => {
+      if (entry.open) {
+        for (const other of entries) if (other !== entry && other.open) other.open = false;
+        burst(hotspots[index]);
+      }
+      syncHotspots();
+    });
+  });
+
+  art.addEventListener('pointermove', (event) => {
+    if (!motion.matches || event.pointerType === 'touch') return;
+    const rect = art.getBoundingClientRect();
+    art.style.setProperty('--light-x', ((event.clientX - rect.left) / rect.width) * 100 + '%');
+    art.style.setProperty('--light-y', ((event.clientY - rect.top) / rect.height) * 100 + '%');
+  });
+</script>
+
+<style>
+  .desk-page {
+    padding-top: clamp(30px, 5vw, 72px);
+    --desk-paper: #ebe4d4;
+    --desk-dark: #202720;
+    --desk-line: #586457;
+    --desk-bright: #e3f39a;
+  }
+
+  .desk-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 24px 40px;
+    padding-bottom: clamp(22px, 4vw, 48px);
+  }
+
+  h1 {
+    font-size: clamp(51px, 9.2vw, 145px);
+    letter-spacing: -.048em;
+    font-weight: 850;
+    line-height: 1;
+  }
+
+  h1 span { color: var(--focus); }
+
+  .desk-bio {
+    justify-self: end;
+    width: min(100%, 340px);
+    display: grid;
+    gap: 7px;
+    color: var(--secondary);
+    font-size: 14px;
+  }
+  .desk-name { color: var(--ink); font-size: 16px; font-weight: 750; }
+  .desk-name span { margin-left: .6em; color: var(--muted); font-size: 13px; font-weight: 500; }
+  .desk-bio a { justify-self: start; padding-block: 5px; text-decoration: underline; text-underline-offset: 4px; }
+  .desk-bio a span { margin-left: 3px; }
+
+  .desk {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(270px, 1fr);
+    align-items: stretch;
+    background: var(--desk-dark);
+    border: 1px solid var(--desk-line);
+  }
+
+  .desk-art {
+    position: relative;
+    isolation: isolate;
+    align-self: start;
+    width: 100%;
+    aspect-ratio: 1100 / 733;
+    overflow: hidden;
+    background: var(--desk-paper);
+  }
+
+  .desk-art img { display: block; width: 100%; height: 100%; }
+  .desk-light {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .38;
+    mix-blend-mode: screen;
+    background: radial-gradient(ellipse at var(--light-x, 47%) var(--light-y, 37%), #faf2bf 0, transparent 34%);
+  }
+
+  .desk-hotspot {
+    position: absolute;
+    z-index: 1;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid #2f382a;
+    border-radius: 50%;
+    background: #fffbef;
+    color: #243020;
+    font: 600 26px/1 var(--sans);
+    cursor: pointer;
+    box-shadow: 0 0 0 4px #fffbef5c;
+  }
+
+  .desk-hotspot[hidden] { display: none; }
+
+  .desk-hotspot:hover, .desk-hotspot[aria-pressed="true"] {
+    background: var(--desk-bright);
+    box-shadow: 0 0 0 6px #d9ee7980;
+  }
+
+  .desk-hotspot:focus-visible { outline: 2px solid #253222; outline-offset: 4px; }
+
+  .hotspot-name {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 8px);
+    transform: translateX(-50%);
+    background: #253222;
+    color: #fffbe9;
+    border: 1px solid #fffbe9a0;
+    padding: 4px 7px;
+    white-space: nowrap;
+    font: 600 12px/1.25 var(--sans);
+    pointer-events: none;
+  }
+
+  .desk-sparks { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+  .desk-sparks i {
+    position: absolute;
+    left: var(--spark-x);
+    top: var(--spark-y);
+    width: 6px;
+    height: 6px;
+    background: #efff9b;
+    border: 1px solid #42543a;
+    border-radius: 50%;
+    opacity: 0;
+  }
+
+  .desk-index {
+    min-width: 0;
+    align-self: stretch;
+    padding: clamp(18px, 3vw, 40px);
+    color: #f1eddd;
+    color-scheme: dark;
+  }
+
+  .desk-index-label { margin-bottom: 16px; color: #c2cbbb; font-size: 13px; letter-spacing: .08em; }
+  .desk-index details { border-top: 1px solid var(--desk-line); }
+  .desk-index details:last-child { border-bottom: 1px solid var(--desk-line); }
+
+  .desk-index summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: clamp(15px, 1.5vw, 21px);
+    font-weight: 750;
+  }
+  .desk-index summary::-webkit-details-marker { display: none; }
+  .desk-index summary:hover, .desk-index details[open] summary { color: var(--desk-bright); }
+  .desk-object { color: #c2cbbb; font-size: 12px; font-weight: 500; }
+
+  .desk-entry { padding: 9px 0 16px; }
+  .desk-entry h2 { font-size: clamp(17px, 1.75vw, 24px); margin-bottom: 8px; }
+  .desk-entry p { font-size: 13px; line-height: 1.65; color: #d1d8c7; }
+  .desk-entry a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    gap: 14px;
+    margin-top: 5px;
+    color: var(--desk-bright);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .desk-index :is(a, summary):focus-visible { outline-color: var(--desk-bright); }
+
+  @media (max-width: 920px) {
+    .desk-intro, .desk { grid-template-columns: minmax(0, 1fr); }
+    .desk-bio { justify-self: start; }
+    .desk-hotspot { width: 39px; height: 39px; font-size: 24px; }
+    .hotspot-name { top: calc(100% + 4px); padding: 3px 5px; font-size: 11px; }
+    .desk-index summary { min-height: 44px; scroll-margin-top: 155px; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .desk-hotspot { transition: background-color .22s var(--ease), box-shadow .22s var(--ease); }
+    .desk-index details[open] .desk-entry { animation: desk-enter .32s var(--ease) both; }
+    @keyframes desk-enter {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>

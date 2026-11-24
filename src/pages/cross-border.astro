@@ -40,3 +40,14 @@ const notes = [
     </div>
   </section>
 </Site>
+
+<script>
+  function openLinkedNote() {
+    const id = window.location.hash.slice(1);
+    const note = document.getElementById(id);
+    if (note instanceof HTMLDetailsElement) note.open = true;
+  }
+
+  openLinkedNote();
+  window.addEventListener('hashchange', openLinkedNote);
+</script>

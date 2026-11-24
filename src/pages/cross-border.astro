@@ -28,6 +28,11 @@ const notes = [
       <a class="tab" href="/cross-border/" aria-current="page">跨境笔记</a>
       <a class="tab" href="/practice/">修学笔记</a>
     </nav>
+    <div class="note-filter" data-filter hidden>
+      <label for="note-search">查找笔记</label>
+      <input id="note-search" type="search" placeholder="输入主题或关键词" />
+      <p role="status" data-results></p>
+    </div>
     <div class="note-stack">
       {notes.map(({ id, title, Article }) => (
         <details id={id}>
@@ -42,6 +47,23 @@ const notes = [
 </Site>
 
 <script>
+  const filter = document.querySelector<HTMLElement>('[data-filter]')!;
+  const field = document.querySelector<HTMLInputElement>('#note-search')!;
+  const results = document.querySelector<HTMLElement>('[data-results]')!;
+  const notes = Array.from(document.querySelectorAll<HTMLDetailsElement>('.note-stack details'));
+
+  filter.hidden = false;
+  field.addEventListener('input', () => {
+    const query = field.value.trim().toLocaleLowerCase();
+    let count = 0;
+    for (const note of notes) {
+      const matches = (note.textContent ?? '').toLocaleLowerCase().includes(query);
+      note.hidden = !matches;
+      if (matches) count++;
+    }
+    results.textContent = query ? (count ? `找到 ${count} 则笔记` : '没有找到匹配的笔记。') : '';
+  });
+
   function openLinkedNote() {
     const id = window.location.hash.slice(1);
     const note = document.getElementById(id);
@@ -51,3 +73,28 @@ const notes = [
   openLinkedNote();
   window.addEventListener('hashchange', openLinkedNote);
 </script>
+
+<style>
+  .note-filter {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    max-width: 380px;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+  .note-filter[hidden], .note-stack details[hidden] { display: none; }
+  .note-filter label { font-weight: 750; }
+  .note-filter input {
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    font: inherit;
+  }
+  .note-filter input:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  .note-filter p { color: var(--muted); }
+  .note-filter p:empty { display: none; }
+</style>

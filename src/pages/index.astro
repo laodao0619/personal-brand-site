@@ -1,336 +1,261 @@
 ---
 import Site from '../layouts/Site.astro';
+import { stations } from '../data/stations';
 
-const objects = [
-  {
-    id: 'workbook', name: '笔记本', section: '跨境笔记', x: 34, y: 75,
-    title: '一次测试，只变一个因素',
-    description: '先写清假设、变量和判赢线，再判断一个广告创意值不值得继续投。',
-    href: '/cross-border/#meta', action: '读 Meta 广告笔记',
-  },
-  {
-    id: 'beads', name: '念珠', section: '修学笔记', x: 53, y: 72,
-    title: '三摩地何以称为「等持」？',
-    description: '从词源、唯识五别境心所与念佛三昧，看看同一个名相在不同语境中的用法。',
-    href: '/practice/#名相三摩地', action: '读三摩地摘录',
-  },
-  {
-    id: 'window', name: '窗', section: '雨声室', x: 48, y: 34,
-    title: '把雨声留在背景里',
-    description: '打开窗，听一会儿纯雨声，或加一点原创环境音乐。',
-    href: '/rain/', action: '打开雨声室',
-  },
-  {
-    id: 'computer', name: '电脑', section: '服务', x: 76, y: 67,
-    title: '找出没带来购买的广告花费',
-    description: '按广告、落地页和市场拆开看，明确哪些该停，哪些值得复测。',
-    href: '/services/', action: '了解诊断与陪跑',
-  },
+const tips = [
+  '想看看这张书桌从哪儿来？可以回到窗边手记。',
+  '跨境笔记里有一个练习：测试广告时，一次只变一个因素。',
+  '如果想安静一会儿，雨声室有纯雨声，也能叠加环境音乐。',
+  '净土与唯识的阅读线索和待研讨问题，都在修学笔记里。',
 ];
-
-const particles = Array.from({ length: 10 });
 ---
 <Site title="首页">
-  <div class="desk-page">
-    <header class="desk-intro">
-      <h1>窗边手记<span>。</span></h1>
-      <div class="desk-bio">
-        <p class="desk-name">高嘉隆 <span>独立站运营</span></p>
-        <p>三年独立站运营经验。我为卖家做广告诊断，也为小团队提供运营陪跑，平时记录跨境和修学。</p>
-        <a href="/services/">看服务 <span aria-hidden="true">↗</span></a>
+  <section class="signal-hero" aria-labelledby="signal-title">
+    <div class="signal-copy">
+      <p class="signal-author">高嘉隆 / 独立站运营</p>
+      <h1 id="signal-title">窗边<span>信号站<span class="signal-period">。</span></span></h1>
+      <p class="signal-intro">三年独立站运营经验。我帮卖家诊断广告浪费，也陪小团队搭建运营流程。这里收录跨境、修学和一间可以听雨的房间。</p>
+      <div class="signal-actions">
+        <a href="#stations">开始探索 <span aria-hidden="true">↓</span></a>
+        <a href="/services/">查看服务 <span aria-hidden="true">↗</span></a>
       </div>
-    </header>
+    </div>
 
-    <section class="desk" aria-label="探索窗边书桌" data-desk>
-      <figure class="desk-art" data-art>
-        <img src="/study-desk.webp" alt="窗边的工作台，桌上摆着打开的笔记本、念珠和电脑，窗外是群山" width="1100" height="733" fetchpriority="high" />
-        <div class="desk-light" aria-hidden="true"></div>
-        <div class="desk-sparks" aria-hidden="true">
-          {particles.map(() => <i></i>)}
-        </div>
-        {objects.map((object, index) => (
-          <button
-            class="desk-hotspot"
-            type="button"
-            hidden
-            data-select={object.id}
-            data-x={object.x}
-            data-y={object.y}
-            aria-label={`浏览${object.name}：${object.section}`}
-            aria-controls={`desk-${object.id}`}
-            aria-pressed={index === 0 ? 'true' : 'false'}
-            style={`--x:${object.x}%;--y:${object.y}%`}
-          >
-            <span aria-hidden="true">+</span>
-            <span class="hotspot-name" aria-hidden="true">{object.name}</span>
-          </button>
-        ))}
+    <div class="host-panel">
+      <figure class="host-portrait">
+        <img src="/pixel-host.webp" alt="戴帽子和眼镜、盘腿坐着的像素人物" width="498" height="498" fetchpriority="high" />
       </figure>
+      <div class="host-note">
+        <div>
+          <p class="host-title">像素向导</p>
+          <p id="host-message" role="status">{tips[0]}</p>
+        </div>
+        <button type="button" data-host data-tips={JSON.stringify(tips)} aria-controls="host-message" hidden>下一条 <span aria-hidden="true">↻</span></button>
+      </div>
+    </div>
+  </section>
 
-      <aside class="desk-index" aria-label="桌上索引">
-        <p class="desk-index-label">桌上索引</p>
-        {objects.map((object, index) => (
-          <details id={`desk-${object.id}`} name="desk-index" data-item={object.id} open={index === 0}>
-            <summary>
-              <span>{object.section}</span>
-              <span class="desk-object">{object.name}</span>
-            </summary>
-            <div class="desk-entry">
-              <h2>{object.title}</h2>
-              <p>{object.description}</p>
-              <a href={object.href}>{object.action} <span aria-hidden="true">↗</span></a>
-            </div>
-          </details>
-        ))}
-      </aside>
-    </section>
-  </div>
+  <section class="station-section" id="stations" aria-labelledby="station-title">
+    <div class="station-heading">
+      <div>
+        <h2 id="station-title">探索印记</h2>
+        <p>打开一个站点，点亮一枚印记。进度保存在当前浏览器。</p>
+      </div>
+      <div class="station-progress">
+        <label for="stamp-progress"><span data-stamp-count>0</span> / {stations.length} 已点亮</label>
+        <progress id="stamp-progress" value="0" max={stations.length} data-stamp-progress></progress>
+      </div>
+    </div>
+
+    <div class="station-grid">
+      {stations.map(station => (
+        <a class="station-card" data-tone={station.tone} href={station.href}>
+          <div class="station-card-top">
+            <span class="station-symbol" aria-hidden="true">{station.symbol}</span>
+            <span class="station-stamp" data-stamp={station.href}>未点亮</span>
+          </div>
+          <h3>{station.label}</h3>
+          <p>{station.description}</p>
+        </a>
+      ))}
+    </div>
+    <p class="station-completion" data-stamp-completion hidden>四枚印记已点亮。你逛完了窗边信号站。</p>
+  </section>
+
+  <a class="desk-link" href="/desk/">
+    <div>
+      <h2>回到窗边手记</h2>
+      <p>点一点桌上的窗、笔记本、念珠和电脑。</p>
+    </div>
+    <span aria-hidden="true">↗</span>
+  </a>
 </Site>
 
 <script>
-  const desk = document.querySelector<HTMLElement>('[data-desk]')!;
-  const art = desk.querySelector<HTMLElement>('[data-art]')!;
-  const hotspots = Array.from(art.querySelectorAll<HTMLButtonElement>('[data-select]'));
-  const entries = Array.from(desk.querySelectorAll<HTMLDetailsElement>('[data-item]'));
-  const sparks = Array.from(art.querySelectorAll<HTMLElement>('.desk-sparks i'));
-  const motion = matchMedia('(prefers-reduced-motion: no-preference)');
+  const button = document.querySelector<HTMLButtonElement>('[data-host]');
+  const message = document.querySelector<HTMLElement>('#host-message');
 
-  function burst(hotspot: HTMLButtonElement) {
-    if (!motion.matches) return;
-    art.style.setProperty('--spark-x', hotspot.dataset.x + '%');
-    art.style.setProperty('--spark-y', hotspot.dataset.y + '%');
+  if (button && message) {
+    const tips: string[] = JSON.parse(button.dataset.tips ?? '[]');
+    const portrait = document.querySelector<HTMLElement>('.host-portrait');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let current = 0;
+    button.hidden = false;
 
-    sparks.forEach((spark, index) => {
-      spark.getAnimations().forEach(animation => animation.cancel());
-      const angle = index * 2 * Math.PI / sparks.length;
-      const distance = 28 + ((index * 17) % 34);
-      const travel = `${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px`;
-      spark.animate([
-        { opacity: 1, transform: 'translate(0, 0) scale(1)' },
-        { opacity: 0, transform: `translate(${travel}) scale(.35)` },
-      ], { duration: 540 + index * 19, easing: 'cubic-bezier(.14,.7,.35,1)' });
+    button.addEventListener('click', () => {
+      current = (current + 1) % tips.length;
+      message.textContent = tips[current];
+      if (reducedMotion.matches || !portrait) return;
+      portrait.getAnimations().forEach(animation => animation.cancel());
+      portrait.animate([
+        { transform: 'translateY(0) rotate(0)' },
+        { transform: 'translateY(-6px) rotate(-1.5deg)' },
+        { transform: 'translateY(0) rotate(0)' },
+      ], { duration: 280, easing: 'cubic-bezier(.2,.75,.25,1)' });
     });
   }
-
-  function syncHotspots() {
-    const active = entries.find(entry => entry.open);
-    for (const hotspot of hotspots) {
-      hotspot.setAttribute('aria-pressed', String(hotspot.dataset.select === active?.dataset.item));
-    }
-  }
-
-  hotspots.forEach((hotspot, index) => {
-    hotspot.hidden = false;
-    hotspot.addEventListener('click', () => {
-      const entry = entries[index];
-      if (entry.open) burst(hotspot);
-      entry.open = true;
-      syncHotspots();
-      const summary = entry.querySelector<HTMLElement>('summary')!;
-      summary.focus({ preventScroll: true });
-      if (matchMedia('(max-width: 920px)').matches) {
-        summary.scrollIntoView({ block: 'nearest', behavior: motion.matches ? 'smooth' : 'auto' });
-      }
-    });
-  });
-
-  entries.forEach((entry, index) => {
-    entry.addEventListener('toggle', () => {
-      if (entry.open) {
-        for (const other of entries) if (other !== entry && other.open) other.open = false;
-        burst(hotspots[index]);
-      }
-      syncHotspots();
-    });
-  });
-
-  art.addEventListener('pointermove', (event) => {
-    if (!motion.matches || event.pointerType === 'touch') return;
-    const rect = art.getBoundingClientRect();
-    art.style.setProperty('--light-x', ((event.clientX - rect.left) / rect.width) * 100 + '%');
-    art.style.setProperty('--light-y', ((event.clientY - rect.top) / rect.height) * 100 + '%');
-  });
 </script>
 
 <style>
-  .desk-page {
-    padding-top: clamp(30px, 5vw, 72px);
-    --desk-paper: #ebe4d4;
-    --desk-dark: #202720;
-    --desk-line: #586457;
-    --desk-bright: #e3f39a;
-  }
-
-  .desk-intro {
+  .signal-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-    align-items: end;
-    gap: 24px 40px;
-    padding-bottom: clamp(22px, 4vw, 48px);
-  }
-
-  h1 {
-    font-size: clamp(51px, 9.2vw, 145px);
-    letter-spacing: -.048em;
-    font-weight: 850;
-    line-height: 1;
-  }
-
-  h1 span { color: var(--focus); }
-
-  .desk-bio {
-    justify-self: end;
-    width: min(100%, 340px);
-    display: grid;
-    gap: 7px;
-    color: var(--secondary);
-    font-size: 14px;
-  }
-  .desk-name { color: var(--ink); font-size: 16px; font-weight: 750; }
-  .desk-name span { margin-left: .6em; color: var(--muted); font-size: 13px; font-weight: 500; }
-  .desk-bio a { justify-self: start; padding-block: 5px; text-decoration: underline; text-underline-offset: 4px; }
-  .desk-bio a span { margin-left: 3px; }
-
-  .desk {
-    display: grid;
-    grid-template-columns: minmax(0, 2.2fr) minmax(270px, 1fr);
+    grid-template-columns: minmax(0, 1.25fr) minmax(300px, .84fr);
     align-items: stretch;
-    background: var(--desk-dark);
-    border: 1px solid var(--desk-line);
+    gap: clamp(28px, 7vw, 108px);
+    margin-block: clamp(24px, 5vw, 68px) clamp(38px, 6vw, 84px);
   }
 
-  .desk-art {
-    position: relative;
-    isolation: isolate;
-    align-self: start;
-    width: 100%;
-    aspect-ratio: 1100 / 733;
-    overflow: hidden;
-    background: var(--desk-paper);
+  .signal-copy {
+    align-self: center;
+    color: var(--ink);
   }
 
-  .desk-art img { display: block; width: 100%; height: 100%; }
-  .desk-light {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: .38;
-    mix-blend-mode: screen;
-    background: radial-gradient(ellipse at var(--light-x, 47%) var(--light-y, 37%), #faf2bf 0, transparent 34%);
+  .signal-author { font-size: 13px; font-weight: 750; color: var(--muted); }
+  h1 {
+    margin-block: 14px 23px;
+    font-size: clamp(58px, 9.4vw, 136px);
+    line-height: .99;
+    letter-spacing: -.055em;
+    font-weight: 900;
   }
+  h1 > span { display: block; }
+  .signal-period { color: var(--focus); }
+  .signal-intro { max-width: 32em; color: var(--secondary); }
+  .signal-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 23px; }
+  .signal-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 45px;
+    padding: 8px 13px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    font-size: 14px;
+    font-weight: 750;
+  }
+  .signal-actions a:first-child { background: var(--accent); border-color: var(--accent-ink); color: var(--accent-ink); }
+  .signal-actions a:hover { box-shadow: 3px 3px 0 var(--ink); }
 
-  .desk-hotspot {
-    position: absolute;
-    z-index: 1;
-    left: var(--x);
-    top: var(--y);
-    transform: translate(-50%, -50%);
+  .host-panel {
     display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border: 1px solid #2f382a;
-    border-radius: 50%;
-    background: #fffbef;
-    color: #243020;
-    font: 600 26px/1 var(--sans);
+    align-content: space-between;
+    gap: 12px;
+    position: relative;
+    padding: clamp(14px, 3vw, 32px);
+    border: 1px solid #34473e;
+    background:
+      radial-gradient(#405b5033 1px, transparent 1px) 0 0 / 12px 12px,
+      #badecd;
+    color: #22302c;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  .host-portrait {
+    align-self: center;
+    justify-self: center;
+    width: min(100%, 324px);
+    overflow: hidden;
+    border: 1px solid #53645d;
+    background: #fff;
+  }
+  .host-portrait img { display: block; width: 100%; height: auto; }
+
+  .host-note {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 6px 14px;
+    min-height: 108px;
+    padding: 12px;
+    border: 1px solid #53645d;
+    background: #f8fdf8;
+  }
+  .host-title { font-size: 12px; font-weight: 750; color: #415b50; margin-bottom: 4px; }
+  #host-message { font-size: 14px; line-height: 1.55; }
+  .host-note button {
+    flex: none;
+    align-self: end;
+    min-height: 40px;
+    padding: 4px 9px;
+    font: 650 12px var(--sans);
+    background: #d5edc1;
+    color: #25362d;
+    border: 1px solid #53645d;
     cursor: pointer;
-    box-shadow: 0 0 0 4px #fffbef5c;
   }
+  .host-note button:focus-visible { outline: 2px solid #473fa2; outline-offset: 3px; }
+  .host-note button:hover { background: #e4f4d7; }
 
-  .desk-hotspot[hidden] { display: none; }
-
-  .desk-hotspot:hover, .desk-hotspot[aria-pressed="true"] {
-    background: var(--desk-bright);
-    box-shadow: 0 0 0 6px #d9ee7980;
+  .station-section { scroll-margin-top: 148px; }
+  .station-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px 40px;
+    flex-wrap: wrap;
+    margin-bottom: 17px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--line);
   }
+  .station-heading h2 { font-size: clamp(27px, 4vw, 44px); }
+  .station-heading p { color: var(--muted); margin-top: 6px; font-size: 14px; }
+  .station-progress { display: grid; gap: 4px; min-width: min(100%, 144px); }
+  .station-progress label { font: 700 13px/1.4 var(--sans); }
+  progress { width: 100%; height: 8px; accent-color: var(--focus); }
 
-  .desk-hotspot:focus-visible { outline: 2px solid #253222; outline-offset: 4px; }
-
-  .hotspot-name {
-    position: absolute;
-    left: 50%;
-    top: calc(100% + 8px);
-    transform: translateX(-50%);
-    background: #253222;
-    color: #fffbe9;
-    border: 1px solid #fffbe9a0;
-    padding: 4px 7px;
-    white-space: nowrap;
-    font: 600 12px/1.25 var(--sans);
-    pointer-events: none;
-  }
-
-  .desk-sparks { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
-  .desk-sparks i {
-    position: absolute;
-    left: var(--spark-x);
-    top: var(--spark-y);
-    width: 6px;
-    height: 6px;
-    background: #efff9b;
-    border: 1px solid #42543a;
-    border-radius: 50%;
-    opacity: 0;
-  }
-
-  .desk-index {
+  .station-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .station-card {
     min-width: 0;
-    align-self: stretch;
-    padding: clamp(18px, 3vw, 40px);
-    color: #f1eddd;
-    color-scheme: dark;
+    padding: clamp(14px, 2.3vw, 27px);
+    background: var(--card-color);
+    color: #292640;
+    border: 1px solid #554d73;
+    display: grid;
+    align-content: start;
+    gap: 6px;
   }
+  .station-card:hover { box-shadow: 4px 4px 0 var(--ink); }
+  .station-card[data-tone="violet"] { --card-color: #e4dbfc; }
+  .station-card[data-tone="peach"] { --card-color: #f7dfd9; }
+  .station-card[data-tone="mint"] { --card-color: #cceadd; }
+  .station-card[data-tone="lime"] { --card-color: #e4edbc; }
 
-  .desk-index-label { margin-bottom: 16px; color: #c2cbbb; font-size: 13px; letter-spacing: .08em; }
-  .desk-index details { border-top: 1px solid var(--desk-line); }
-  .desk-index details:last-child { border-bottom: 1px solid var(--desk-line); }
+  .station-card-top { display: flex; justify-content: space-between; align-items: start; gap: 3px; }
+  .station-symbol { font: 700 clamp(28px, 4vw, 50px)/1 monospace; }
+  .station-stamp { padding: 2px 5px; border: 1px dashed #716883; font: 600 11px/1.4 var(--sans); }
+  .station-stamp.is-stamped { background: #292640; color: #fff; border-color: #292640; border-style: solid; }
+  .station-card h3 { margin-top: 6px; font-size: clamp(17px, 2vw, 27px); }
+  .station-card p { font-size: 13px; line-height: 1.5; }
+  .station-completion { margin-top: 12px; color: var(--focus); font-weight: 750; }
 
-  .desk-index summary {
+  .desk-link {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 8px;
-    padding: 10px 0;
-    cursor: pointer;
-    list-style: none;
-    font-size: clamp(15px, 1.5vw, 21px);
-    font-weight: 750;
+    gap: 18px;
+    margin-top: 26px;
+    padding: 16px;
+    background: var(--panel);
+    border: 1px solid var(--line);
   }
-  .desk-index summary::-webkit-details-marker { display: none; }
-  .desk-index summary:hover, .desk-index details[open] summary { color: var(--desk-bright); }
-  .desk-object { color: #c2cbbb; font-size: 12px; font-weight: 500; }
+  .desk-link:hover { border-color: var(--focus); }
+  .desk-link h2 { font-size: 18px; }
+  .desk-link p { margin-top: 5px; color: var(--muted); font-size: 13px; }
+  .desk-link > span { font-size: 24px; }
 
-  .desk-entry { padding: 9px 0 16px; }
-  .desk-entry h2 { font-size: clamp(17px, 1.75vw, 24px); margin-bottom: 8px; }
-  .desk-entry p { font-size: 13px; line-height: 1.65; color: #d1d8c7; }
-  .desk-entry a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    gap: 14px;
-    margin-top: 5px;
-    color: var(--desk-bright);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .desk-index :is(a, summary):focus-visible { outline-color: var(--desk-bright); }
-
-  @media (max-width: 920px) {
-    .desk-intro, .desk { grid-template-columns: minmax(0, 1fr); }
-    .desk-bio { justify-self: start; }
-    .desk-hotspot { width: 39px; height: 39px; font-size: 24px; }
-    .hotspot-name { top: calc(100% + 4px); padding: 3px 5px; font-size: 11px; }
-    .desk-index summary { min-height: 44px; scroll-margin-top: 155px; }
+  @media (max-width: 780px) {
+    .signal-hero { grid-template-columns: minmax(0, 1fr); }
+    h1 { font-size: clamp(62px, 14vw, 104px); }
+    .host-panel { max-width: 525px; }
+    .host-portrait { width: min(100%, 248px); }
+    .station-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .desk-hotspot { transition: background-color .22s var(--ease), box-shadow .22s var(--ease); }
-    .desk-index details[open] .desk-entry { animation: desk-enter .32s var(--ease) both; }
-    @keyframes desk-enter {
-      from { opacity: 0; transform: translateY(5px); }
+    .station-card, .signal-actions a { transition: box-shadow .16s ease; }
+    .host-panel { animation: signal-in .43s var(--ease) both; }
+    @keyframes signal-in {
+      from { opacity: 0; transform: translateY(9px); }
       to { opacity: 1; transform: translateY(0); }
     }
   }

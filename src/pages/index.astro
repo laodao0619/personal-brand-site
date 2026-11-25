@@ -63,6 +63,13 @@ const tips = [
   </section>
 
   <div class="extra-stations">
+    <a class="desk-link sea-link" href="/deep-sea/">
+      <div>
+        <h2>深海下潜</h2>
+        <p>从海面向下，遇见一万米以下的世界。</p>
+      </div>
+      <span aria-hidden="true">↓</span>
+    </a>
     <a class="desk-link" href="/desk/">
       <div>
         <h2>回到窗边手记</h2>
@@ -238,6 +245,7 @@ const tips = [
   .station-completion { margin-top: 12px; color: var(--focus); font-weight: 750; }
 
   .extra-stations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 26px; }
+  .sea-link { grid-column: 1 / -1; background: #dce8e3 !important; color: #213c43; }
   .desk-link {
     display: flex;
     justify-content: space-between;

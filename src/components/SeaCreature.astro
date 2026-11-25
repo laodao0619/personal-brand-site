@@ -1,0 +1,51 @@
+---
+// Original geometric silhouettes. Decorative, not anatomical/size-scale diagrams.
+const { shape = 'fish' } = Astro.props;
+---
+<svg viewBox="0 0 320 180" fill="none" aria-hidden="true" focusable="false">
+  <g fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    {shape === 'turtle' ? <>
+      <path d="M113 70Q61 23 53 38L100 90 70 133Q88 146 124 111M190 65Q227 24 241 39L206 86 237 125Q214 136 189 109" opacity=".65"/>
+      <ellipse cx="156" cy="85" rx="59" ry="40"/><ellipse cx="227" cy="80" rx="22" ry="15"/>
+      <path d="M126 60L151 49 184 65 186 100 156 121 125 103Z M125 65L186 100M184 65L125 103" stroke="#173c49" fill="none"/><circle cx="234" cy="75" r="3" fill="#173c49"/>
+    </> : shape === 'ribbon' ? <>
+      <path d="M27 63Q100 30 167 80T293 99Q234 146 159 101T27 91Z"/><path d="M31 56Q100 23 169 73T289 94" stroke="#e5899a" stroke-width="7"/><path d="M34 61L26 20M42 60L50 29" stroke="#e5899a"/><circle cx="39" cy="74" r="3" fill="#152432"/>
+    </> : shape === 'crown' ? <>
+      <ellipse cx="160" cy="57" rx="53" ry="33" fill-opacity=".45"/>
+      {[95,115,135,155,175,195,215].map((x,i)=><path d={`M${x+10} 67Q${x-10} 100 ${x+15} ${118+i*3}`} fill="none" stroke-width="3"/>)}
+      <path d="M161 78Q124 119 179 143T156 176" fill="none" stroke-width="3"/>
+      {[118,139,160,181,202].map(x=><circle cx={x} cy="66" r="4" fill="#bbebff" stroke="none"/>)}
+    </> : shape === 'jelly' ? <>
+      <path d="M90 69Q94 12 160 12Q223 16 230 69Q171 96 90 69" opacity=".7"/>
+      {[114,143,175,205].map((x,i)=><path d={`M${x} 73Q${x-25} 103 ${x+5} 123T${x-8+i*3} 170`} stroke-width="10" opacity=".65" fill="none"/>)}
+      <path d="M102 64Q160 78 217 64" fill="none"/>
+    </> : shape === 'squid' || shape === 'octopus' ? <>
+      <path d={shape === 'squid' ? 'M98 46L158 16 202 59 184 83 127 83Z' : 'M109 59Q105 12 158 17Q210 17 210 65L190 87 125 87Z'}/>
+      <path d="M114 51Q66 21 92 75L117 73M205 47Q253 18 224 76L202 72" opacity=".65"/>
+      {[125,142,160,178,195].map((x,i)=><path d={`M${x} 78Q${x-25} 125 ${x+10} 145T${x+(i-2)*23} 165`} stroke-width="6" fill="none"/>)}
+      <circle cx="137" cy="62" r="6" fill="#152432"/><circle cx="182" cy="62" r="6" fill="#152432"/>
+    </> : shape === 'isopod' || shape === 'amphipod' ? <>
+      <path d="M86 89Q91 40 160 39Q220 42 237 89Q204 128 138 127Q100 117 86 89Z" opacity=".8"/>
+      {[111,134,158,181,204].map(x=><><path d={`M${x} 51Q${x+20} 80 ${x} 115`} stroke="#273442" fill="none"/><path d={`M${x} 115L${x-15} 144M${x} 53L${x-14} 29`} fill="none"/></>)}
+      <path d="M226 73L275 39M229 81L287 72" fill="none"/><circle cx="221" cy="83" r="4" fill="#152432"/>
+    </> : shape === 'diver' ? <>
+      <circle cx="163" cy="34" r="12"/><path d="M161 51L147 103 123 141 105 138 117 157 151 121 174 151 195 158 184 143 168 102 179 60 201 79 216 69 202 64 180 43Z"/>
+      <path d="M147 56L119 83 97 73" stroke-width="8" fill="none"/><circle cx="198" cy="34" r="4" fill="none"/><circle cx="208" cy="18" r="2"/>
+    </> : shape === 'ship' ? <>
+      <path d="M27 105L76 141H253L296 105Z" opacity=".7"/><path d="M57 100V81H259V100M85 79V65H228V80" fill="none"/>
+      {[102,143,184,225].map(x=><path d={`M${x} 66V39H${x+16}V66Z`}/>)}
+      <path d="M49 102V47M271 103V60M20 148H298" fill="none"/>
+    </> : shape === 'mountain' ? <>
+      <path d="M16 154L137 23 201 96 228 68 306 154Z" opacity=".3"/><path d="M16 154L137 23 201 96 228 68 306 154M104 61L137 73 151 58 169 60" fill="none"/>
+      <path d="M137 23L126 119 164 154" opacity=".6" fill="none"/>
+    </> : shape === 'sunfish' ? <>
+      <path d="M139 49L167 8 177 57Q225 69 230 96Q227 130 179 137L153 173 146 133Q100 117 102 85Q107 54 139 49Z"/><path d="M216 70L210 120M157 88L140 107" stroke="#243a4b" fill="none"/><circle cx="120" cy="80" r="4" fill="#243a4b"/>
+    </> : <>
+      <path d={shape === 'shark' || shape === 'dolphin' ? 'M36 89Q86 52 142 66L173 27 181 68Q223 72 260 85L293 54 282 91 300 122 259 101 184 111 163 143 148 110Q78 114 36 89Z' : shape === 'snailfish' ? 'M37 86Q38 40 103 49Q157 51 165 89Q228 121 292 91Q232 151 160 117Q45 140 37 86Z' : 'M48 91Q53 45 122 48Q181 49 229 83L281 55 266 95 285 127 226 108Q150 143 83 120Z'}/>
+      <path d="M123 91L156 112 128 115" opacity=".5" fill="#152432"/>
+      {shape === 'barreleye' ? <><ellipse cx="88" cy="65" rx="36" ry="31" fill="#a2e5cb" fill-opacity=".3"/><ellipse cx="81" cy="65" rx="7" ry="14" fill="#183e37"/><ellipse cx="102" cy="65" rx="7" ry="14" fill="#183e37"/></> : <circle cx="69" cy="81" r="4" fill="#152432"/>}
+      {shape === 'angler' && <><path d="M110 52Q132 -8 63 23L57 43" fill="none"/><circle cx="57" cy="43" r="10" fill="#e3f7b1" stroke="none"/><path d="M49 94L68 101 56 111 82 112" fill="#152432"/></>}
+      {shape === 'viper' && <path d="M49 94L70 110 66 92 84 113 84 94" fill="#152432"/>}
+    </>}
+  </g>
+</svg>
